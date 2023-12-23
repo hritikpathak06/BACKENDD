@@ -101,12 +101,12 @@ const getSingleCategory = async (req, res) => {
 // Delete Category
 const deleteCategory = async (req, res) => {
   try {
-    const{id} = req.params;
+    const { id } = req.params;
     const category = await Category.findByIdAndDelete(id);
     res.status(200).send({
-        success:true,
-        message:`${category} Category Deleted Successfully`
-    })
+      success: true,
+      message: `${category} Category Deleted Successfully`,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send({

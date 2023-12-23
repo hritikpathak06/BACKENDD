@@ -18,12 +18,19 @@ const productSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  images: [String],
-  category: {
-    type: mongoose.ObjectId,
-    ref: "Category",
-    required: true,
-  },
+  images: [
+    {
+      url:{
+        type:String,
+        required:true,
+      }
+    }
+  ],
+  // category: {
+  //   type: mongoose.ObjectId,
+  //   ref: "Category",
+  //   required: true,
+  // },
   stock: {
     type: Number,
     required: true,
@@ -33,6 +40,11 @@ const productSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  user:{
+    type:mongoose.ObjectId,
+    ref:"User",
+    required:true,
+  }
 });
 
 const Product = mongoose.model("Product", productSchema);
