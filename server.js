@@ -29,23 +29,27 @@ app.use(fileUpload());
 
 
 // Increase the payload size limit (adjust the limit as needed)
-app.use(bodyParser.json({ limit: "15mb" }));
-app.use(bodyParser.urlencoded({ extended: true, limit: "15mb" }));
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
+
 
 // Routes
 const userRoutes = require("./routes/userRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
 
 
 // Routes Api
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/category",categoryRoutes);
 
 
 // port
 const PORT = process.env.PORT || 7000;
 
+
 // Test api
 app.get("/", (req, res) => {
-  res.send("Hello Backend User");
+  res.send("Hello Backend User==> Deleted Api Created Successfully");
 });
 
 

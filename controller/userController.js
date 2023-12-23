@@ -6,12 +6,14 @@ const User = require("../models/userModel");
 const JWT = require("jsonwebtoken");
 const cloudinary = require("cloudinary").v2;
 
-// Cloudinary Config
+//******************************************** */ Cloudinary Config **********************************
 cloudinary.config({
   cloud_name: "drbzzh6j7",
   api_key: "776943229854165",
   api_secret: "RWZatGE-U7hTRE0Re8XM8JnVv84",
 });
+
+
 
 // Register User
 const register = async (req, res) => {
@@ -23,10 +25,10 @@ const register = async (req, res) => {
         message: "Fill Out All The fields",
       });
     }
-    
+
     // Upload image to Cloudinary
     const result = await cloudinary.uploader.upload(avatar, {
-      folder: "profile_images", 
+      folder: "profile_images",
     });
 
     const hashedPassword = await hashPassword(password);
@@ -36,7 +38,7 @@ const register = async (req, res) => {
       password: hashedPassword,
       address,
       phone,
-      avatar:result.secure_url,
+      avatar: result.secure_url,
     });
     const user = await newUser.save();
     res.status(201).send({
@@ -54,6 +56,8 @@ const register = async (req, res) => {
   }
 };
 
+
+
 // Login User
 const loginUser = async (req, res) => {
   try {
@@ -64,16 +68,13 @@ const loginUser = async (req, res) => {
         message: "Inavlid email or password",
       });
     }
-
     const user = await User.findOne({ email: email });
-
     if (!user) {
       return res.status(404).send({
         success: false,
         message: "Email is not registered",
       });
     }
-
     const matchedPassword = await comparePassword(password, user.password);
     if (!matchedPassword) {
       return res.status(404).send({
@@ -102,6 +103,7 @@ const loginUser = async (req, res) => {
     });
   }
 };
+
 
 // test
 const testController = async (req, res) => {

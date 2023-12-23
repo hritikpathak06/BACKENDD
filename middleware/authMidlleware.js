@@ -12,9 +12,12 @@ const requireSignIn = async (req, res, next) => {
     next();
   } catch (error) {
     console.log(error);
+    res.status(404).send({
+      success: false,
+      message: "Please login to continue the process",
+    });
   }
 };
-
 
 // Admin Protected Route
 const isAdmin = async (req, res, next) => {
