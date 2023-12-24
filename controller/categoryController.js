@@ -82,6 +82,7 @@ const updateCategory = async (req, res) => {
 // Get Single Category
 const getSingleCategory = async (req, res) => {
   try {
+    const { id } = req.params;
     const category = await Category.findOne({ slug: req.params.slug });
     res.status(200).send({
       success: true,
@@ -98,6 +99,7 @@ const getSingleCategory = async (req, res) => {
   }
 };
 
+
 // Delete Category
 const deleteCategory = async (req, res) => {
   try {
@@ -105,7 +107,7 @@ const deleteCategory = async (req, res) => {
     const category = await Category.findByIdAndDelete(id);
     res.status(200).send({
       success: true,
-      message: `${category} Category Deleted Successfully`,
+      message: ` Category Deleted Successfully`,
     });
   } catch (error) {
     console.log(error);
@@ -116,6 +118,7 @@ const deleteCategory = async (req, res) => {
     });
   }
 };
+
 
 module.exports = {
   createCategory,

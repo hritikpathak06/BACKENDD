@@ -37,7 +37,7 @@ const createProduct = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      user:req.user.id,
+      // user: req.user.id,
       product,
     });
   } catch (error) {
@@ -50,17 +50,18 @@ const createProduct = async (req, res) => {
   }
 };
 
-
 // Get All Products
-const getAllProducts = async(req,res) => {
+const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find({}).sort({createdAt:-1});
+    const products = await Product.find({})
+      .sort({ createdAt: -1 })
+      .populate("category");
     res.status(200).send({
-      success:true,
-      message:"All Prodcuts Fetched Successfully",
-      productCount:products.length,
-      products
-    })
+      success: true,
+      message: "All Prodcuts Fetched Successfully",
+      productCount: products.length,
+      products,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send({
@@ -69,6 +70,79 @@ const getAllProducts = async(req,res) => {
       error,
     });
   }
-}
+};
 
-module.exports = { createProduct,getAllProducts };
+// Get Single Product
+const getSingleProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findById(id).populate("category");
+    if (!product) {
+      return res.status(404).send({
+        success: false,
+        message: "No Product Found",
+      });
+    }
+    res.status(200).send({
+      success: true,
+      message: "Single Product Fetched Successfully ",
+      product,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Internal Server Error!!",
+      error,
+    });
+  }
+};
+
+// Update product
+const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findByIdAndUpdate(id, req.body, {
+      new: true,
+    }).populate("category");
+    res.status(200).send({
+      success: false,
+      message: "Product Updated Successfully",
+      product,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Internal Server Error!!",
+      error,
+    });
+  }
+};
+
+// Delete product
+const deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findByIdAndDelete(id);
+    res.status(200).send({
+      success: false,
+      message: "Product Deleted Successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Internal Server Error!!",
+      error,
+    });
+  }
+};
+
+module.exports = {
+  createProduct,
+  getAllProducts,
+  getSingleProduct,
+  updateProduct,
+  deleteProduct,
+};
