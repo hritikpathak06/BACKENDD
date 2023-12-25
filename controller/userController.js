@@ -105,9 +105,30 @@ const loginUser = async (req, res) => {
 };
 
 
+// Get All Users
+const getAllUsers = async(req,res) => {
+  try {
+    const users = await User.find({});
+    res.status(200).send({
+      success:true,
+      message:"All Users Fetched Successfully",
+      totalUsers:users.length,
+      users
+    })
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Internal Server Error!!",
+      error,
+    });
+  }
+}
+
+
 // test
 const testController = async (req, res) => {
   res.send("Test Api Running Successfully");
 };
 
-module.exports = { register, loginUser, testController };
+module.exports = { register, loginUser, testController,getAllUsers };

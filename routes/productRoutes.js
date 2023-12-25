@@ -5,6 +5,8 @@ const {
   getSingleProduct,
   updateProduct,
   deleteProduct,
+  paymentGatewayToken,
+  paymentGateway,
 } = require("../controller/productControlller");
 const { requireSignIn, isAdmin } = require("../middleware/authMidlleware");
 const router = express.Router();
@@ -23,5 +25,10 @@ router.put("/update-product/:id",requireSignIn,isAdmin,updateProduct);
 
 // delete product
 router.delete("/delete-product/:id",requireSignIn,isAdmin,deleteProduct);
+
+
+// Payment Routes
+router.get("/braintree/token",paymentGatewayToken);
+router.post("/braintree/payment",requireSignIn,paymentGateway)
 
 module.exports = router;

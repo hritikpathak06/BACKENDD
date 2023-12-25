@@ -3,6 +3,7 @@ const {
   register,
   loginUser,
   testController,
+  getAllUsers,
 } = require("../controller/userController");
 const { requireSignIn, isAdmin } = require("../middleware/authMidlleware");
 const router = express.Router();
@@ -12,6 +13,9 @@ router.post("/register", register);
 
 // Login
 router.post("/login", loginUser);
+
+// Get All Users
+router.get("/all-users",requireSignIn,isAdmin,getAllUsers);
 
 // Dummy Route
 router.get("/test", requireSignIn, isAdmin, testController);
