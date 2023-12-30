@@ -143,6 +143,72 @@ const getMyOrders = async (req, res) => {
   }
 };
 
+// Delete My Orders
+const deleteMyOrders = async (req, res) => {
+  try {
+    const order = await Order.findByIdAndDelete(req.params.id);
+    res.status(200).send({
+      success: true,
+      message: "Order Deleted Successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Internal Server Error!!",
+      error,
+    });
+  }
+};
+
+// Get All Orders
+const getAllOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({})
+      .populate("products")
+      .populate("buyer", "name")
+      .sort({ createdAt: -1 });
+
+    res.status(200).send({
+      success: true,
+      totalOrders: orders.length,
+      orders,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Internal Server Error!!",
+      error,
+    });
+  }
+};
+
+// Change Order Status
+const updateOrderStatus = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    const order = await Order.findByIdAndUpdate(
+      orderId,
+      { status },
+      { new: true }
+    );
+    res.status(200).send({
+      success: true,
+      message: "Order Updated Successfully",
+      order,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Internal Server Error!!",
+      error,
+    });
+  }
+};
 
 // test
 const testController = async (req, res) => {
@@ -155,4 +221,7 @@ module.exports = {
   testController,
   getAllUsers,
   getMyOrders,
+  deleteMyOrders,
+  getAllOrders,
+  updateOrderStatus,
 };
