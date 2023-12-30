@@ -3,6 +3,7 @@ const {
   comparePassword,
 } = require("../middleware/hadhMddleware");
 const User = require("../models/userModel");
+const Order = require("../models/orderModel");
 const JWT = require("jsonwebtoken");
 const cloudinary = require("cloudinary").v2;
 
@@ -12,8 +13,6 @@ cloudinary.config({
   api_key: "776943229854165",
   api_secret: "RWZatGE-U7hTRE0Re8XM8JnVv84",
 });
-
-
 
 // Register User
 const register = async (req, res) => {
@@ -55,8 +54,6 @@ const register = async (req, res) => {
     });
   }
 };
-
-
 
 // Login User
 const loginUser = async (req, res) => {
@@ -104,17 +101,16 @@ const loginUser = async (req, res) => {
   }
 };
 
-
 // Get All Users
-const getAllUsers = async(req,res) => {
+const getAllUsers = async (req, res) => {
   try {
     const users = await User.find({});
     res.status(200).send({
-      success:true,
-      message:"All Users Fetched Successfully",
-      totalUsers:users.length,
-      users
-    })
+      success: true,
+      message: "All Users Fetched Successfully",
+      totalUsers: users.length,
+      users,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send({
@@ -123,7 +119,29 @@ const getAllUsers = async(req,res) => {
       error,
     });
   }
-}
+};
+
+// Get Orders Of User
+const getMyOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ buyer: req.user._id })
+      .populate("products")
+      .populate("buyer");
+    res.status(200).send({
+      success: true,
+      message: "Order Details Fetched Successfully",
+      totalOrders: orders.length,
+      orders,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Internal Server Error!!",
+      error,
+    });
+  }
+};
 
 
 // test
@@ -131,4 +149,10 @@ const testController = async (req, res) => {
   res.send("Test Api Running Successfully");
 };
 
-module.exports = { register, loginUser, testController,getAllUsers };
+module.exports = {
+  register,
+  loginUser,
+  testController,
+  getAllUsers,
+  getMyOrders,
+};

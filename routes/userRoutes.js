@@ -4,6 +4,7 @@ const {
   loginUser,
   testController,
   getAllUsers,
+  getMyOrders,
 } = require("../controller/userController");
 const { requireSignIn, isAdmin } = require("../middleware/authMidlleware");
 const router = express.Router();
@@ -30,5 +31,8 @@ router.get("/user-auth", requireSignIn, (req, res) => {
 router.get("/admin-auth", requireSignIn, isAdmin, (req, res) => {
   res.status(200).send({ ok: true });
 });
+
+// My Orders
+router.get("/myOrders",requireSignIn,getMyOrders);
 
 module.exports = router;
