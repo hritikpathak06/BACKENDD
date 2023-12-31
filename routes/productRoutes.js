@@ -7,6 +7,7 @@ const {
   deleteProduct,
   paymentGatewayToken,
   paymentGateway,
+  productFilter,
 } = require("../controller/productControlller");
 const { requireSignIn, isAdmin } = require("../middleware/authMidlleware");
 const router = express.Router();
@@ -25,6 +26,9 @@ router.put("/update-product/:id",requireSignIn,isAdmin,updateProduct);
 
 // delete product
 router.delete("/delete-product/:id",requireSignIn,isAdmin,deleteProduct);
+
+// Filters
+router.post("/product-filter",productFilter)
 
 
 // Payment Routes

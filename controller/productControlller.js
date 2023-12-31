@@ -2,6 +2,7 @@ const Product = require("../models/productModel");
 const cloudinary = require("cloudinary");
 const braintree = require("braintree");
 const Order = require("../models/orderModel");
+const Category = require("../models/categoryModel");
 
 // Cloudinary Config
 cloudinary.config({
@@ -150,6 +151,29 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+// Filters
+const productFilter = async (req, res) => {
+  try {
+    const { checked, radio,rating } = req.body;
+    let args = {};
+    if (checked.length > 0) args.category = checked;
+    if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
+    if (rating.length) args.rating = { $gte: radio[0], $lte: radio[1] };
+    const products = await Product.find(args);
+    res.status(200).send({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Internal Server Error!!",
+      error,
+    });
+  }
+};
+
 // Payment Gateway ==> Token
 const paymentGatewayToken = async (req, res) => {
   try {
@@ -207,6 +231,7 @@ module.exports = {
   getSingleProduct,
   updateProduct,
   deleteProduct,
+  productFilter,
   paymentGatewayToken,
   paymentGateway,
 };
