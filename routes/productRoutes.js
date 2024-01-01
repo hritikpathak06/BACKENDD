@@ -8,6 +8,7 @@ const {
   paymentGatewayToken,
   paymentGateway,
   productFilter,
+  searchProductFilter,
 } = require("../controller/productControlller");
 const { requireSignIn, isAdmin } = require("../middleware/authMidlleware");
 const router = express.Router();
@@ -29,6 +30,9 @@ router.delete("/delete-product/:id",requireSignIn,isAdmin,deleteProduct);
 
 // Filters
 router.post("/product-filter",productFilter)
+
+// Search
+router.get("/search/:keyword",searchProductFilter)
 
 
 // Payment Routes

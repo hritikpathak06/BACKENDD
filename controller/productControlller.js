@@ -154,7 +154,7 @@ const deleteProduct = async (req, res) => {
 // Filters
 const productFilter = async (req, res) => {
   try {
-    const { checked, radio,rating } = req.body;
+    const { checked, radio, rating } = req.body;
     let args = {};
     if (checked.length > 0) args.category = checked;
     if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
@@ -164,6 +164,27 @@ const productFilter = async (req, res) => {
       success: true,
       products,
     });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Internal Server Error!!",
+      error,
+    });
+  }
+};
+
+// Search Product Filters
+const searchProductFilter = async (req, res) => {
+  try {
+    const { keyword } = req.params;
+    const results = await Product.find({
+      $or: [
+        { name: { $regex: keyword, $options: "i" } },
+        { description: { $regex: keyword, $options: "i" } },
+      ],
+    });
+    res.json(results)
   } catch (error) {
     console.log(error);
     res.status(500).send({
@@ -232,6 +253,7 @@ module.exports = {
   updateProduct,
   deleteProduct,
   productFilter,
+  searchProductFilter,
   paymentGatewayToken,
   paymentGateway,
 };
