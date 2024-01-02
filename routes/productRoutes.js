@@ -9,6 +9,7 @@ const {
   paymentGateway,
   productFilter,
   searchProductFilter,
+  filterProductByCategory,
 } = require("../controller/productControlller");
 const { requireSignIn, isAdmin } = require("../middleware/authMidlleware");
 const router = express.Router();
@@ -32,7 +33,10 @@ router.delete("/delete-product/:id",requireSignIn,isAdmin,deleteProduct);
 router.post("/product-filter",productFilter)
 
 // Search
-router.get("/search/:keyword",searchProductFilter)
+router.get("/search/:keyword",searchProductFilter);
+
+// Filter By Category
+router.get("/product-category/:slug",filterProductByCategory)
 
 
 // Payment Routes

@@ -184,7 +184,28 @@ const searchProductFilter = async (req, res) => {
         { description: { $regex: keyword, $options: "i" } },
       ],
     });
-    res.json(results)
+    res.json(results);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Internal Server Error!!",
+      error,
+    });
+  }
+};
+
+// Filter Products by Category
+const filterProductByCategory = async (req, res) => {
+  try {
+    const category = await Category.findOne({ slug: req.params.slug });
+    const products = await Product.find({ category }).populate("category");
+    res.status(200).send({
+      success: true,
+      message: "All Categories And Product Fetched Successfully",
+      category,
+      products,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send({
@@ -256,4 +277,5 @@ module.exports = {
   searchProductFilter,
   paymentGatewayToken,
   paymentGateway,
+  filterProductByCategory,
 };
