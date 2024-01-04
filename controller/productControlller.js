@@ -216,6 +216,31 @@ const filterProductByCategory = async (req, res) => {
   }
 };
 
+// Similar Products
+const getSimilarProducts = async (req, res) => {
+  try {
+    const { pid, cid } = req.params;
+    const products = await Product.find({
+      category: cid,
+      _id: { $ne: pid },
+    })
+      .limit(9)
+      .populate("category");
+    res.status(200).send({
+      success: true,
+      message: "Products Fetched on the basis of their category",
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Internal Server Error!!",
+      error,
+    });
+  }
+};
+
 // Payment Gateway ==> Token
 const paymentGatewayToken = async (req, res) => {
   try {
@@ -275,6 +300,7 @@ module.exports = {
   deleteProduct,
   productFilter,
   searchProductFilter,
+  getSimilarProducts,
   paymentGatewayToken,
   paymentGateway,
   filterProductByCategory,

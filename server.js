@@ -44,7 +44,7 @@ const PORT = process.env.PORT || 7000;
 
 // Test api
 app.get("/", (req, res) => {
-  res.send("Hello Backend User==> Search Added");
+  res.send("Hello Backend User==> All Filteres added");
 });
 
 // Server listening
